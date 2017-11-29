@@ -1,0 +1,76 @@
+<template id="hello-world-template">
+    <style>
+        #container {
+            border: 2px solid green;
+        }
+
+        h1 {
+            color: green;
+        }
+
+        :host(.blue) > div > h1 {
+            color: blue;
+        }
+    </style>
+    <div id="container">
+        <b>I'm an hello-world component!</b>
+        <h1>Greeting <span id="greetingVal"></span></h1>
+    </div>
+</template>
+
+<script type="text/javascript">
+    customElements.define('hello-world',
+        class HelloWorldComponent extends HTMLElement {
+
+            constructor() {
+                super();
+                this.addEventListener('click', () => {
+                    console.log('You clicked me, you naughty!');
+                });
+
+                this._shadowRoot = this.attachShadow({mode: 'open'});
+                this._shadowRoot.appendChild(document.currentScript.ownerDocument.querySelector('#hello-world-template').content.cloneNode(true));
+
+                setTimeout(() => {
+                    const myEvent = new CustomEvent("userLogin", {
+                        detail: {
+                            username: "jarek"
+                        }
+                    });
+                    this.dispatchEvent(myEvent);
+                }, 2000)
+            }
+
+            static get observedAttributes() {
+                return ['disabled', 'greeting'];
+            }
+
+            get greeting() {
+                return this.getAttribute('greeting');
+            }
+
+            get disabled() {
+                return this.hasAttribute('disabled');
+            }
+
+            set disabled(val) {
+                if (val) {
+                    this.setAttribute('disabled', '');
+                } else {
+                    this.removeAttribute('disabled');
+                }
+            }
+
+            connectedCallback() {
+                console.log('conntected');
+            }
+
+            // Only called for the disabled and greeting attributes due to observedAttributes
+            attributeChangedCallback(name, oldValue, newValue) {
+                if (this._shadowRoot.querySelector('#greetingVal')) {
+                    this._shadowRoot.querySelector('#greetingVal').textContent = `${this.greeting}`;
+                }
+                console.log(`name: ${name}, oldValue:${oldValue}, newValue:${newValue}`);
+            }
+        });
+</script>

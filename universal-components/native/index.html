@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        h1 {
+            color: red;
+        }
+        input{
+            margin-top: 10px;
+        }
+    </style>
+    <script type="text/javascript">
+        function changeGreeting() {
+            document.querySelector('hello-world').setAttribute('greeting', document.querySelector('#greeting-input').value);
+        }
+
+        console.log('Not ready!', document.querySelector('hello-world'));
+
+        document.addEventListener("DOMContentLoaded",
+            function (event) {
+                console.log('Ready to go!', document.querySelector('hello-world'));
+                document.querySelector('hello-world').addEventListener('userLogin', () => {
+                    console.log('I reacted on event!');
+                })
+            });
+    </script>
+    <meta charset="UTF-8">
+    <link rel="import" href="hello-world.component.html">
+    <title>Native Component</title>
+</head>
+<body>
+<h1> This is red </h1>
+<hello-world greeting="My friend">
+</hello-world>
+<input id="greeting-input" oninput="changeGreeting()"/>
+</body>
+
+</html>
